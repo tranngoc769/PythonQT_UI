@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1369</width>
+    <width>1365</width>
     <height>810</height>
    </rect>
   </property>
@@ -135,9 +135,7 @@
                 </rect>
                </property>
                <property name="styleSheet">
-                <string notr="true">QScrollArea{
-	background :rgb(255, 255, 255)
-}</string>
+                <string notr="true">QScrollArea{background :rgb(255, 255, 255)}</string>
                </property>
                <property name="widgetResizable">
                 <bool>true</bool>
@@ -246,12 +244,7 @@
                 </rect>
                </property>
                <property name="styleSheet">
-                <string notr="true">QLineEdit{
-	border: 1px solid rgb(173, 173, 173);
-	border-radius: 5px;
-	background:transparent;
-	padding :  0px 10px
-}</string>
+                <string notr="true">QLineEdit{border: 1px solid rgb(173, 173, 173);	border-radius: 5px;	background:transparent;	padding :  0px 10px;}</string>
                </property>
                <property name="placeholderText">
                 <string>https://t.me/&lt;name&gt;</string>
@@ -288,11 +281,7 @@
                 </rect>
                </property>
                <property name="styleSheet">
-                <string notr="true">QSpinBox{
-	border: 1px solid rgb(173, 173, 173);
-	border-radius: 5px;
-	background:transparent;
-}</string>
+                <string notr="true">QSpinBox{	border: 1px solid rgb(173, 173, 173);border-radius: 5px;	background:transparent;}</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -317,11 +306,7 @@
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">QPushButton{
-	background: rgb(225, 225, 225);
-	border-radius: 10px;
-	color:black;
-}</string>
+               <string notr="true">QPushButton{background: rgb(225, 225, 225);border-radius: 10px;color:black;}</string>
               </property>
               <property name="text">
                <string>Start Join Group</string>
@@ -345,33 +330,31 @@
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">QPushButton{
-	background: rgb(225, 225, 225);
-	border-radius: 10px;
-	color:black;
-}</string>
+               <string notr="true">QPushButton{background: rgb(225, 225, 225);border-radius: 10px;color:black;}</string>
               </property>
               <property name="text">
                <string>Start Leave Group</string>
               </property>
              </widget>
-             <widget class="QProgressBar" name="progressBar_2">
+             <widget class="QPushButton" name="JLProcess">
               <property name="geometry">
                <rect>
-                <x>510</x>
+                <x>514</x>
                 <y>125</y>
-                <width>111</width>
+                <width>101</width>
                 <height>31</height>
                </rect>
               </property>
-              <property name="value">
-               <number>50</number>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
               </property>
-              <property name="textVisible">
-               <bool>false</bool>
+              <property name="styleSheet">
+               <string notr="true">QPushButton{ border:0px;background:rgb(252, 234, 160);}</string>
               </property>
-              <property name="invertedAppearance">
-               <bool>false</bool>
+              <property name="text">
+               <string>STOP</string>
               </property>
              </widget>
             </widget>
@@ -436,12 +419,7 @@
                 <enum>Qt::LeftToRight</enum>
                </property>
                <property name="styleSheet">
-                <string notr="true">QLineEdit{
-	border: 1px solid rgb(173, 173, 173);
-	border-radius: 5px;
-	background:transparent;
-	padding :  0px 10px
-}</string>
+                <string notr="true">QLineEdit{border: 1px solid rgb(173, 173, 173);	border-radius: 5px;	background:transparent;	padding :  0px 10px;}</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -481,11 +459,7 @@
                 </rect>
                </property>
                <property name="styleSheet">
-                <string notr="true">QSpinBox{
-	border: 1px solid rgb(173, 173, 173);
-	border-radius: 5px;
-	background:transparent;
-}</string>
+                <string notr="true">QSpinBox{	border: 1px solid rgb(173, 173, 173);border-radius: 5px;	background:transparent;}</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -510,33 +484,31 @@
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">QPushButton{
-	background: rgb(225, 225, 225);
-	border-radius: 10px;
-	color:black;
-}</string>
+               <string notr="true">QPushButton{background: rgb(225, 225, 225);border-radius: 10px;color:black;}</string>
               </property>
               <property name="text">
                <string>Start Change Name</string>
               </property>
              </widget>
-             <widget class="QProgressBar" name="progressBar">
+             <widget class="QPushButton" name="NameProcess">
               <property name="geometry">
                <rect>
-                <x>510</x>
+                <x>514</x>
                 <y>115</y>
-                <width>111</width>
+                <width>101</width>
                 <height>31</height>
                </rect>
               </property>
-              <property name="value">
-               <number>50</number>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
               </property>
-              <property name="textVisible">
-               <bool>false</bool>
+              <property name="styleSheet">
+               <string notr="true">QPushButton{ border:0px;background:rgb(252, 234, 160);}</string>
               </property>
-              <property name="invertedAppearance">
-               <bool>false</bool>
+              <property name="text">
+               <string>STOP</string>
               </property>
              </widget>
             </widget>
@@ -641,11 +613,13 @@
                    </property>
                    <item>
                     <widget class="QLineEdit" name="ContentLog">
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
                      <property name="styleSheet">
-                      <string notr="true">QLineEdit{
-background:transparent;
-border:0px;
-}</string>
+                      <string notr="true">QLineEdit{background:transparent;border:0px;}</string>
                      </property>
                      <property name="text">
                       <string>Tets</string>
@@ -679,7 +653,7 @@ border:0px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1369</width>
+     <width>1365</width>
      <height>21</height>
     </rect>
    </property>
