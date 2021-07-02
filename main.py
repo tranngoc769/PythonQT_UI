@@ -9,8 +9,19 @@
 
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-
+import csv
+def ReadAccountList():
+        list_accs = []
+        with open('accounts.csv') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                line_count = 0
+                for row in csv_reader:
+                        if line_count == 0:
+                                line_count += 1
+                        else:
+                                list_accs.append([row[0],row[1],row[2]])
+                                line_count += 1
+        return list_accs
 class Ui_MainWindow(object):
 
         def setupUi(self, MainWindow):
@@ -79,19 +90,7 @@ class Ui_MainWindow(object):
                 self.verticalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
                 self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
                 self.verticalLayout_2.setObjectName("verticalLayout_2")
-                self.UserGroup = QtWidgets.QHBoxLayout()
-                self.UserGroup.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
-                self.UserGroup.setObjectName("UserGroup")
-                self.Phone = QtWidgets.QLineEdit(self.ListUserScrollContent)
-                self.Phone.setObjectName("Phone")
-                self.UserGroup.addWidget(self.Phone)
-                self.AppID = QtWidgets.QLineEdit(self.ListUserScrollContent)
-                self.AppID.setObjectName("AppID")
-                self.UserGroup.addWidget(self.AppID)
-                self.HashID = QtWidgets.QLineEdit(self.ListUserScrollContent)
-                self.HashID.setObjectName("HashID")
-                self.UserGroup.addWidget(self.HashID)
-                self.verticalLayout_2.addLayout(self.UserGroup)
+               
                 self.ListUserScroll.setWidget(self.ListUserScrollContent)
                 self.JoinLeaveGroup = QtWidgets.QGroupBox(self.MainFrame)
                 self.JoinLeaveGroup.setGeometry(QtCore.QRect(20, 220, 641, 181))
@@ -299,7 +298,6 @@ class Ui_MainWindow(object):
                 self.retranslateUi(MainWindow)
                 self.ContentTab.setCurrentIndex(0)
                 QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
                 MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -329,6 +327,8 @@ class Ui_MainWindow(object):
                 self.actionExit.setText(_translate("MainWindow", "Exit"))
         def setevent(self, MainWindow):
                 self.ChangeNameBtn.clicked.connect(self.ChangeNameFunc)
+                self.JoinGroupBtn.clicked.connect(self.JoinGroupFunc)
+                self.LeaveGroupBtn.clicked.connect(self.LeaveGroupFunc)
                 pass
         def ChangeNameFunc(self):
                 if self.isRun == False:
@@ -375,6 +375,28 @@ class Ui_MainWindow(object):
                         self.JLProcess.setText(_translate("MainWindow", "FINISH"))
                         self.JLProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(255, 85, 0);}")
                         self.isRun = False
+        def addAccBlock(self,content):
+                # ADD A USER GROUP (PHONE - APPID - APIHASH)
+                usergroup = QtWidgets.QHBoxLayout()
+                usergroup.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
+                usergroup.setObjectName("UserGroup")
+                phone = QtWidgets.QLineEdit(self.ListUserScrollContent)
+                phone.setText(str(content[2]))
+                phone.setMaximumWidth(150)
+                usergroup.addWidget(phone)
+                app_id = QtWidgets.QLineEdit(self.ListUserScrollContent)
+                app_id.setText(str(content[0]))
+                phone.setMaximumWidth(100)
+                usergroup.addWidget(app_id)
+                hash_id = QtWidgets.QLineEdit(self.ListUserScrollContent)
+                hash_id.setText(str(content[1]))
+                usergroup.addWidget(hash_id)
+                self.verticalLayout_2.addLayout(usergroup)
+                # 
+        def loadAccount(self):
+                self.Accounts = ReadAccountList()
+                for item in self.Accounts:
+                        self.addAccBlock(item)
 
 if __name__ == "__main__":
     import sys
@@ -383,5 +405,6 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     ui.setevent(MainWindow)
+    ui.loadAccount()
     MainWindow.show()
     sys.exit(app.exec_())
