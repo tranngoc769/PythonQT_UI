@@ -10,7 +10,7 @@ import asyncio
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 import csv
-
+from PyQt5.QtGui import QIcon
 from telethon import TelegramClient, client
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.channels import JoinChannelRequest,LeaveChannelRequest
@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
                         try:
                                 str_log = phone[0:5] + "xxxxxx"
                                 self.addLog("Change account phone " + str_log + " --> "+ name)
-                                await self.tele_client(UpdateProfileRequest(last_name="", first_name=name))
+                                await self.tele_client(UpdateProfileRequest(last_name="", first_name=name, about =name))
                                 return;
                         except KeyboardInterrupt:
                                 # await self.tele_client.start()
@@ -336,7 +336,8 @@ class Ui_MainWindow(object):
                 QtCore.QMetaObject.connectSlotsByName(MainWindow)
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
-                MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+                MainWindow.setWindowIcon(QtGui.QIcon('logo.png'))
+                MainWindow.setWindowTitle(_translate("MainWindow", "Telegram Multi Program Ver1.0"))
                 self.ListUserGroup.setTitle(_translate("MainWindow", "List User"))
                 self.JoinLeaveGroup.setTitle(_translate("MainWindow", "Group / Channel Auto Join - Leave"))
                 self.URLGroup.setTitle(_translate("MainWindow", "Group / Change URL"))
@@ -379,6 +380,7 @@ class Ui_MainWindow(object):
                         for item in self.Accounts:
                                 name = self.InputName.text()
                                 delay = self.InputTimeName.text()
+                                print("SIGNING : "+str(item[2]))
                                 self.tele_client = TelegramClient(item[2], item[0], item[1])
                                 loop = asyncio.get_event_loop()
                                 loop.run_until_complete(self.change_name_main(loop,name, item[2]))
@@ -386,6 +388,7 @@ class Ui_MainWindow(object):
                         # FINISH
                         self.NameProcess.setText(_translate("MainWindow", "FINISH"))
                         self.NameProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(255, 85, 0);}")
+                        QtWidgets.QApplication.processEvents()
                         self.isRun = False
         def LeaveGroupFunc(self):
                 if self.isRun == False:
@@ -400,6 +403,7 @@ class Ui_MainWindow(object):
                         for item in self.Accounts:
                                 url  = self.InputURL.text()
                                 delay = self.InputTimeJL.text()
+                                print("SIGNING : "+str(item[2]))
                                 self.tele_client = TelegramClient(item[2], item[0], item[1])
                                 loop = asyncio.get_event_loop()
                                 loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 2))
@@ -409,6 +413,7 @@ class Ui_MainWindow(object):
                         self.JLProcess.setText(_translate("MainWindow", "FINISH"))
                         self.JLProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(255, 85, 0);}")
                         self.isRun = False
+                        QtWidgets.QApplication.processEvents()
         def JoinGroupFunc(self):
                 if self.isRun == False:
                         self.isRun = True
@@ -422,6 +427,7 @@ class Ui_MainWindow(object):
                         for item in self.Accounts:
                                 url  = self.InputURL.text()
                                 delay = self.InputTimeJL.text()
+                                print("SIGNING : "+str(item[2]))
                                 self.tele_client = TelegramClient(item[2], item[0], item[1])
                                 loop = asyncio.get_event_loop()
                                 loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1))
@@ -431,13 +437,14 @@ class Ui_MainWindow(object):
                         self.JLProcess.setText(_translate("MainWindow", "FINISH"))
                         self.JLProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(255, 85, 0);}")
                         self.isRun = False
+                        QtWidgets.QApplication.processEvents()
         def addAccBlock(self,content):
                 # ADD A USER GROUP (PHONE - APPID - APIHASH)
                 usergroup = QtWidgets.QHBoxLayout()
                 usergroup.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
                 usergroup.setObjectName("UserGroup")
                 phone = QtWidgets.QLineEdit(self.ListUserScrollContent)
-                phone.setText(str(content[2]))
+                phone.setText(str(content[2])[0:5]+"xxxxxx")
                 phone.setMaximumWidth(150)
                 usergroup.addWidget(phone)
                 app_id = QtWidgets.QLineEdit(self.ListUserScrollContent)
@@ -445,7 +452,7 @@ class Ui_MainWindow(object):
                 phone.setMaximumWidth(100)
                 usergroup.addWidget(app_id)
                 hash_id = QtWidgets.QLineEdit(self.ListUserScrollContent)
-                hash_id.setText(str(content[1]))
+                hash_id.setText(str(content[1])[0:5]+"xxxxxxxxxxxxxxxxx")
                 usergroup.addWidget(hash_id)
                 self.verticalLayout_2.addLayout(usergroup)
                 # 
