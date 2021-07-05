@@ -62,7 +62,6 @@ class Ui_MainWindow(object):
                                 self.addLog("Phone " + str_log + " leave "+ url)
                 except Exception as err:
                         print(err)
-                        sys.exit()
         async def join_leave_channel_main(self,loop,url, phone, mode):
                 await self.tele_client.start()
                 task = loop.create_task(self.join_leave_channel( url, phone, mode))
