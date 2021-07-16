@@ -51,20 +51,27 @@ class Ui_MainWindow(object):
                 await task
                 await self.tele_client.disconnect()
                 task.cancel()
-        async def join_leave_channel(self, url,phone, mode):
+        async def join_leave_channel(self, url,phone, mode, msg = ""):
                 try:
                         str_log = phone[0:5] + "xxxxxx"
                         if mode == 1:
                                 await self.tele_client(JoinChannelRequest(url))
                                 self.addLog("Phone " + str_log + " joined "+ url)
+                                try:
+                                        if msg != "":
+                                                channle = await self.tele_client.get_entity(url)
+                                                await self.tele_client.send_message(entity=channle,message=msg)
+                                                self.addLog("Phone " + str_log + " send messages "+ url)
+                                except:
+                                        pass
                         else:
                                 await self.tele_client(LeaveChannelRequest(url))
                                 self.addLog("Phone " + str_log + " leave "+ url)
                 except Exception as err:
                         print(err)
-        async def join_leave_channel_main(self,loop,url, phone, mode):
+        async def join_leave_channel_main(self,loop,url, phone, mode,msg = ""):
                 await self.tele_client.start()
-                task = loop.create_task(self.join_leave_channel( url, phone, mode))
+                task = loop.create_task(self.join_leave_channel( url, phone, mode,msg))
                 await task
                 await self.tele_client.disconnect()
                 task.cancel()
@@ -386,7 +393,7 @@ class Ui_MainWindow(object):
                                 name = self.InputName.text()
                                 delay = self.InputTimeName.text()
                                 print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[0], item[1])
+                                self.tele_client = TelegramClient(item[2], item[1], item[0])
                                 loop = asyncio.get_event_loop()
                                 loop.run_until_complete(self.change_name_main(loop,name, item[2]))
                                 time.sleep(int(delay))
@@ -409,7 +416,7 @@ class Ui_MainWindow(object):
                                 url  = self.InputURL.text()
                                 delay = self.InputTimeJL.text()
                                 print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[0], item[1])
+                                self.tele_client = TelegramClient(item[2], item[1], item[0])
                                 loop = asyncio.get_event_loop()
                                 loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 2))
                                 time.sleep(int(delay))
@@ -432,10 +439,11 @@ class Ui_MainWindow(object):
                         for item in self.Accounts:
                                 url  = self.InputURL.text()
                                 delay = self.InputTimeJL.text()
+                                msg = self.plainTextEdit.toPlainText()
                                 print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[0], item[1])
+                                self.tele_client = TelegramClient(item[2], item[1], item[0])
                                 loop = asyncio.get_event_loop()
-                                loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1))
+                                loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1,msg))
                                 time.sleep(int(delay))
                         # FINISH
                         QtWidgets.QApplication.processEvents()
