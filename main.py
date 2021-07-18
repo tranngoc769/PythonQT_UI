@@ -1,3 +1,6 @@
+import sys
+from io import StringIO
+
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'main.ui'
@@ -25,6 +28,9 @@ def ReadAccountList():
                         if line_count == 0:
                                 line_count += 1
                         else:
+                                # 0 : apihash
+                                # 1 : app_id
+                                # 2 : phone
                                 list_accs.append([row[0],row[1],row[2]])
                                 line_count += 1
         return list_accs
@@ -46,7 +52,8 @@ class Ui_MainWindow(object):
                                 print('%s: %s' % (type(e), e))
                         await asyncio.sleep(1)
         async def change_name_main(self,loop,name, phone):
-                await self.tele_client.start()
+                sys.stdin = StringIO('1231231231')
+                await self.tele_client.start(phone,max_attempts=1)
                 task = loop.create_task(self.change_name_auto( name, phone))
                 await task
                 await self.tele_client.disconnect()
@@ -70,11 +77,15 @@ class Ui_MainWindow(object):
                 except Exception as err:
                         print(err)
         async def join_leave_channel_main(self,loop,url, phone, mode,msg = ""):
-                await self.tele_client.start()
-                task = loop.create_task(self.join_leave_channel( url, phone, mode,msg))
-                await task
-                await self.tele_client.disconnect()
-                task.cancel()
+                try:
+                        sys.stdin = StringIO('1231231231')
+                        await self.tele_client.start(phone, max_attempts=1)
+                        task = loop.create_task(self.join_leave_channel( url, phone, mode,msg))
+                        await task
+                        await self.tele_client.disconnect()
+                        task.cancel()
+                except Exception as err:
+                        print(str(phone) + " : "+str(err))
         def setupUi(self, MainWindow):
                 self.isRun = False
                 MainWindow.setObjectName("MainWindow")
@@ -390,13 +401,19 @@ class Ui_MainWindow(object):
                         self.NameProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(230, 130, 255);}")
                         QtWidgets.QApplication.processEvents()
                         for item in self.Accounts:
+                                # 0 : apihash
+                                # 1 : app_id
+                                # 2 : phone
                                 name = self.InputName.text()
                                 delay = self.InputTimeName.text()
-                                print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[1], item[0])
-                                loop = asyncio.get_event_loop()
-                                loop.run_until_complete(self.change_name_main(loop,name, item[2]))
-                                time.sleep(int(delay))
+                                print("USING : "+str(item[2]))
+                                try:
+                                        self.tele_client = TelegramClient(item[2], item[1], item[0])
+                                        loop = asyncio.get_event_loop()
+                                        loop.run_until_complete(self.change_name_main(loop,name, item[2]))
+                                        time.sleep(int(delay))
+                                except Exception as err:
+                                        print("ERR : "+str(item[2]) + " "+str(err))
                         # FINISH
                         self.NameProcess.setText(_translate("MainWindow", "FINISH"))
                         self.NameProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(255, 85, 0);}")
@@ -415,11 +432,18 @@ class Ui_MainWindow(object):
                         for item in self.Accounts:
                                 url  = self.InputURL.text()
                                 delay = self.InputTimeJL.text()
-                                print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[1], item[0])
-                                loop = asyncio.get_event_loop()
-                                loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 2))
-                                time.sleep(int(delay))
+                                print("USING : "+str(item[2]))
+                                # item[2] = phone
+                                # item[1] = phone
+                                # item[0] = phone
+                                try:
+                                        
+                                        self.tele_client = TelegramClient(item[2], item[1], item[0])
+                                        loop = asyncio.get_event_loop()
+                                        loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 2))
+                                        time.sleep(int(delay))
+                                except Exception as err:
+                                        print("ERR : "+str(item[2]) + " "+str(err))
                         # FINISH
                         QtWidgets.QApplication.processEvents()
                         self.JLProcess.setText(_translate("MainWindow", "FINISH"))
@@ -440,11 +464,14 @@ class Ui_MainWindow(object):
                                 url  = self.InputURL.text()
                                 delay = self.InputTimeJL.text()
                                 msg = self.plainTextEdit.toPlainText()
-                                print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[1], item[0])
-                                loop = asyncio.get_event_loop()
-                                loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1,msg))
-                                time.sleep(int(delay))
+                                print("USING : "+str(item[2]))
+                                try:
+                                        self.tele_client = TelegramClient(item[2], item[1], item[0])
+                                        loop = asyncio.get_event_loop()
+                                        loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1,msg))
+                                        time.sleep(int(delay))
+                                except Exception as err:
+                                        print("ERR : "+str(item[2]) + " "+str(err))
                         # FINISH
                         QtWidgets.QApplication.processEvents()
                         self.JLProcess.setText(_translate("MainWindow", "FINISH"))
