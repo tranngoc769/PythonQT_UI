@@ -1,3 +1,4 @@
+import random
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'main.ui'
@@ -60,8 +61,12 @@ class Ui_MainWindow(object):
                                 try:
                                         if msg != "":
                                                 channle = await self.tele_client.get_entity(url)
-                                                await self.tele_client.send_message(entity=channle,message=msg)
-                                                self.addLog("Phone " + str_log + " send messages "+ url)
+                                                a = random.randint(0, len(msg)-1)
+                                                await self.tele_client.send_message(entity=channle,message=msg[a])
+                                                print("Phone " + str_log + " send messages "+ url)
+                                                delay = self.InputTimeName.text()
+                                                time.sleep(int(delay))
+
                                 except:
                                         pass
                         else:
@@ -240,6 +245,7 @@ class Ui_MainWindow(object):
                 self.InputName.setStyleSheet("QLineEdit{border: 1px solid rgb(173, 173, 173);    border-radius: 5px;    background:transparent;    padding :  0px 10px;}")
                 self.InputName.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
                 self.InputName.setObjectName("InputName")
+                
                 self.TimeNameGroup = QtWidgets.QGroupBox(self.ChangeNameGroup)
                 self.TimeNameGroup.setGeometry(QtCore.QRect(510, 30, 111, 71))
                 font = QtGui.QFont()
@@ -254,6 +260,7 @@ class Ui_MainWindow(object):
                 self.InputTimeName.setStyleSheet("QSpinBox{    border: 1px solid rgb(173, 173, 173);border-radius: 5px;    background:transparent;}")
                 self.InputTimeName.setAlignment(QtCore.Qt.AlignCenter)
                 self.InputTimeName.setObjectName("InputTimeName")
+                # 
                 self.ChangeNameBtn = QtWidgets.QPushButton(self.ChangeNameGroup)
                 self.ChangeNameBtn.setGeometry(QtCore.QRect(20, 110, 481, 41))
                 font = QtGui.QFont()
@@ -436,15 +443,18 @@ class Ui_MainWindow(object):
                         self.JLProcess.setText(_translate("MainWindow", "JOINING"))
                         self.JLProcess.setStyleSheet("QPushButton{ border:0px;background:rgb(230, 130, 255);}")
                         # RUNING
-                        for item in self.Accounts:
-                                url  = self.InputURL.text()
-                                delay = self.InputTimeJL.text()
-                                msg = self.plainTextEdit.toPlainText()
-                                print("SIGNING : "+str(item[2]))
-                                self.tele_client = TelegramClient(item[2], item[1], item[0])
-                                loop = asyncio.get_event_loop()
-                                loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1,msg))
-                                time.sleep(int(delay))
+                        while True:
+                                for item in self.Accounts:
+                                        url  = self.InputURL.text()
+                                        delay = self.InputTimeJL.text()
+                                        msg = self.plainTextEdit.toPlainText().split("\n")
+                                        print("SIGNING : "+str(item[2]))
+                                        self.tele_client = TelegramClient(item[2], item[1], item[0])
+                                        loop = asyncio.get_event_loop()
+                                        loop.run_until_complete(self.join_leave_channel_main(loop,url, item[2], 1,msg))
+                                        # time.sleep(1)
+                                        time.sleep(int(delay))
+                                time.sleep(1)
                         # FINISH
                         QtWidgets.QApplication.processEvents()
                         self.JLProcess.setText(_translate("MainWindow", "FINISH"))
